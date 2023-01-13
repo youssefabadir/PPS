@@ -1,0 +1,96 @@
+<div th:replace="fragment/header"></div>
+<style>
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+    .tab button {
+        background-color: inherit;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 15px 15px;
+        transition: 0.3s;
+        font-size: 17px;
+    }
+
+    .tab button:hover {
+        background-color: #ddd;
+    }
+
+    .tab button.active {
+        background-color: #808080;
+    }
+
+    .tab-content {
+        display: none;
+        padding: 6px 12px;
+    }
+</style>
+<br/>
+
+<div class="container">
+    <div class="row">
+        <h1 class="text-center"> Welcome to Picture Publishing Service</h1>
+    </div>
+
+    <div class="col-md-6 col-sm-12 p-0" sec:authorize="isAuthenticated()">
+        <a class="btn btn-success"
+           style="width: fit-content;"
+           href="/picture/upload">
+            Upload
+        </a>
+    </div>
+
+    <div class="col-md-6 col-sm-12 p-0" sec:authorize="hasRole('ADMIN')">
+        <br/>
+        <a class="btn btn-success"
+           style="width: fit-content;"
+           href="/picture/reviewPictures">
+            Review Pictures
+        </a>
+    </div>
+
+    <br/>
+
+    <div style="display: flex">
+        <div style="display: flex; flex-direction: column; min-height: 462px; background-color: #ccc">
+            <div class="tab" th:each="picture: ${pictures}"
+                 style="display: flex; justify-content: center; width: inherit">
+                <button th:attr="data-pic-id=${picture.id}" class="tablinks"
+                        onclick="openPicture(event, this.getAttribute('data-pic-id'))"
+                        th:text="${picture.name}">
+                </button>
+            </div>
+        </div>
+        <div th:each="picture: ${pictures}">
+            <div th:id="${picture.id}" class="tab-content">
+                <img th:src="'/load/'+${picture.id}" alt="" style="width: 600px; height: 450px;">
+                <label class="d-block mb-1"><b>Description:</b><span
+                        th:text="' '+${picture.description}"></span></label>
+                <label class="d-block mb-1"><b>Category:</b><span
+                        th:text="' '+${picture.categoryEntity.name}"></span></label>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    function openPicture(event, pictureId) {
+        let i, tabContent, tabLinks;
+        tabContent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabContent.length; i++) {
+            tabContent[i].style.display = "none";
+        }
+        tabLinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tabLinks.length; i++) {
+            tabLinks[i].className = tabLinks[i].className.replace(" active", "");
+        }
+        document.getElementById(pictureId).style.display = "block";
+        event.currentTarget.className += " active";
+    }
+</script>
+
+<div th:replace="fragment/footer"></div>

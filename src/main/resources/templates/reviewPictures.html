@@ -1,0 +1,40 @@
+<div th:replace="fragment/header"></div>
+
+<br/>
+
+<div class="container">
+    <div class="row">
+        <h1 class="text-center">Picture Publishing Service Admin Portal</h1>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <div style="display: flex; flex-wrap: wrap">
+            <div th:each="picture: ${pictures}" style="display: flex; flex-direction: column">
+                <div style="padding: 10px;">
+                    <img th:src="'/load/'+${picture.id}" alt="" style="width: 320px; height: 220px;"/>
+                </div>
+
+                <div style="width: 320px; padding: 10px">
+                    <label class="d-block mb-1"><b>Description:</b><span
+                            th:text="' '+${picture.description}"></span></label>
+                    <label class="d-block mb-1"><b>Category:</b><span
+                            th:text="' '+${picture.categoryEntity.name}"></span></label>
+                </div>
+
+                <div style="display: flex; justify-content: center; gap: 10px">
+                    <form method="post" th:action="'/picture/reviewPictures/reject/' + ${picture.id}">
+                        <button class="btn btn-danger">Reject</button>
+                    </form>
+                    <form method="post" th:action="'/picture/reviewPictures/accept/' + ${picture.id}">
+                        <button class="btn btn-success">Accept</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="fragment/footer"></div>
